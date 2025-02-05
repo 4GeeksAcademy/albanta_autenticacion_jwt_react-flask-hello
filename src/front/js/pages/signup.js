@@ -12,7 +12,7 @@ export const Signup = () => {
         e.preventDefault();
         const success = await actions.signup(email, password);
         if (success) {
-            navigate("/login"); // Redirigir a login tras registrarse
+            navigate("/login"); 
         }
     };
 

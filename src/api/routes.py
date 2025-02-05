@@ -9,10 +9,10 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 
 api = Blueprint('api', __name__)
 
-# Allow CORS requests to this API
+
 CORS(api)
 
-# 🔹 Ruta de prueba
+# Ruta de prueba
 @api.route('/hello', methods=['GET'])
 def handle_hello():
     response_body = {
@@ -21,7 +21,7 @@ def handle_hello():
     return jsonify(response_body), 200
 
 
-# 🔹 Registro de usuario
+# Registro de usuario
 @api.route('/signup', methods=['POST'])
 def signup():
     data = request.get_json()
@@ -29,7 +29,6 @@ def signup():
     if not data or 'email' not in data or 'password' not in data:
         raise APIException("Faltan datos obligatorios", status_code=400)
 
-    # Verificar si el usuario ya existe
     existing_user = User.query.filter_by(email=data['email']).first()
     if existing_user:
         raise APIException("El usuario ya está registrado", status_code=400)
@@ -41,7 +40,7 @@ def signup():
     return jsonify({"message": "Usuario registrado con éxito"}), 201
 
 
-# 🔹 Inicio de sesión
+#  Inicio de sesión
 @api.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -51,14 +50,14 @@ def login():
 
     user = User.query.filter_by(email=data['email']).first()
 
-    if user and user.password == data['password']:  # 🔹 TODO: Agregar hash en producción
-        token = create_access_token(identity=user.id)
+    if user and user.password == data['password']:  
+        token = create_access_token(identity=str(user.id))
         return jsonify({"message": "Inicio de sesión exitoso", "token": token}), 200
     else:
         raise APIException("Credenciales inválidas", status_code=401)
 
 
-# 🔹 Ruta protegida (solo accesible con token)
+#  Ruta protegida (solo accesible con token)
 @api.route('/private', methods=['GET'])
 @jwt_required()
 def private():
@@ -71,7 +70,7 @@ def private():
     return jsonify({"id": user.id, "email": user.email, "message": "Acceso permitido"}), 200
 
 
-# 🔹 Cierre de sesión (Solo frontend elimina el token de sessionStorage)
+# Cierre de sesión (Solo frontend elimina el token de sessionStorage)
 @api.route('/logout', methods=['POST'])
 def logout():
     return jsonify({"message": "Sesión cerrada exitosamente"}), 200

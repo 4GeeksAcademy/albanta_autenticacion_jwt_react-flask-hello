@@ -18,7 +18,7 @@ const injectContext = (PassedComponent) => {
         );
 
         useEffect(() => {
-            state.actions.getMessage(); // 🔹 Sigue cargando el mensaje inicial
+            //state.actions.getMessage(); // 
             const token = sessionStorage.getItem("token");
             if (token) {
                 setState({

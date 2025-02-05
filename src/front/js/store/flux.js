@@ -2,11 +2,11 @@ const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
             message: null,
-            token: sessionStorage.getItem("token") || null, // 🔹 Guardamos el token en el estado global
-            user: null // 🔹 Aquí guardaremos los datos del usuario autenticado
+            token: sessionStorage.getItem("token") || null, 
+            user: null 
         },
         actions: {
-            // 🔹 REGISTRAR USUARIO (SIGNUP)
+       
             signup: async (email, password) => {
                 try {
                     const response = await fetch(process.env.BACKEND_URL + "/api/signup", {
@@ -25,7 +25,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            // 🔹 INICIAR SESIÓN (LOGIN)
+            
             login: async (email, password) => {
                 try {
                     const response = await fetch(process.env.BACKEND_URL + "/api/login", {
@@ -37,7 +37,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     if (!response.ok) throw new Error("Credenciales incorrectas");
 
                     const data = await response.json();
-                    sessionStorage.setItem("token", data.token); // 🔹 Guardamos el token
+                    sessionStorage.setItem("token", data.token); 
                     setStore({ token: data.token });
 
                     console.log("Usuario autenticado:", data);
@@ -48,16 +48,16 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            // 🔹 CERRAR SESIÓN (LOGOUT)
+          
             logout: () => {
-                sessionStorage.removeItem("token"); // 🔹 Eliminamos el token
+                sessionStorage.removeItem("token"); 
                 setStore({ token: null, user: null });
                 console.log("Sesión cerrada");
             },
 
-            // 🔹 VERIFICAR SI EL USUARIO ESTÁ AUTENTICADO
+            
             isAuthenticated: () => {
-                return !!getStore().token; // 🔹 Si hay token, el usuario está autenticado
+                return !!getStore().token; 
             }
         }
     };
